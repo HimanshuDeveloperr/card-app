@@ -35,10 +35,28 @@ const FetchCardData = () => {
     })
   }
 
+
+  const onSave = async (id, newName, newLink) => {
+    const URL = `https://card-api-e5682-default-rtdb.firebaseio.com/users/${id}.json`;
+    const response = await axios.put(URL, { name: newName, link: newLink });
+    const updatedDetail = {
+      id: id,
+      name: response.data.name,
+      link: response.data.link,
+    };
+    setCardDetails((prevDetails) => {
+      const index = prevDetails.findIndex((detail) => detail.id === id);
+      const newDetails = [...prevDetails];
+      newDetails[index] = updatedDetail;
+      return newDetails;
+    });
+  };
+
+  
   return (
     <div>
       {cardDetatils.map((detail) => (
-        <Cards key={detail.id} name={detail.name} link={detail.link} onClick={removeHandler} id={detail.id}></Cards>
+        <Cards key={detail.id} name={detail.name} link={detail.link} onClick={removeHandler} id={detail.id} onSave={onSave}></Cards>
       ))}
     </div>
   );
