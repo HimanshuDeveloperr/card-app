@@ -1,12 +1,13 @@
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cards from "./Card";
 
 const FetchCardData = () => {
-  const [cardDetatils, setCardDetails] = useState([]);
+  const [cardDetails, setCardDetails] = useState([]);
 
   useEffect(() => {
-    const fetching = async () => {
+    const fetchData = async () => {
       const URL = `https://card-api-e5682-default-rtdb.firebaseio.com/users.json`;
       const response = await axios.get(URL);
       const data = response.data;
@@ -19,47 +20,54 @@ const FetchCardData = () => {
           id: key,
           name: data[key].name,
           link: data[key].link,
+          bucket: data[key].bucket, // add bucket to object
         });
       }
       console.log(details);
       setCardDetails(details);
     };
-    fetching();
+    fetchData();
   }, [setCardDetails]);
 
-  const removeHandler=(id)=>{
-    const URL = `https://card-api-e5682-default-rtdb.firebaseio.com/users/${id}.json`
-    axios.delete(URL)
-    setCardDetails((prevDetails)=>{
-        return prevDetails.filter((detail)=>detail.id !== id)
-    })
-  }
-
-
-  const onSave = async (id, newName, newLink) => {
+  const removeHandler = (id) => {
     const URL = `https://card-api-e5682-default-rtdb.firebaseio.com/users/${id}.json`;
-    const response = await axios.put(URL, { name: newName, link: newLink });
-    const updatedDetail = {
-      id: id,
-      name: response.data.name,
-      link: response.data.link,
-    };
+    axios.delete(URL);
     setCardDetails((prevDetails) => {
-      const index = prevDetails.findIndex((detail) => detail.id === id);
-      const newDetails = [...prevDetails];
-      newDetails[index] = updatedDetail;
-      return newDetails;
+      return prevDetails.filter((detail) => detail.id !== id);
     });
   };
 
-  
+  const saveHandler = (id, name, link, bucket) => {
+    const URL = `https://card-api-e5682-default-rtdb.firebaseio.com/users/${id}.json`;
+    axios.patch(URL, { name, link, bucket });
+    setCardDetails((prevDetails) => {
+      const updatedDetails = [...prevDetails];
+      const index = updatedDetails.findIndex((detail) => detail.id === id);
+      if (index !== -1) {
+        updatedDetails[index].name = name;
+        updatedDetails[index].link = link;
+        updatedDetails[index].bucket = bucket;
+      }
+      return updatedDetails;
+    });
+  };
+
   return (
     <div>
-      {cardDetatils.map((detail) => (
-        <Cards key={detail.id} name={detail.name} link={detail.link} onClick={removeHandler} id={detail.id} onSave={onSave}></Cards>
+      {cardDetails.map((detail) => (
+        <Cards
+          key={detail.id}
+          name={detail.name}
+          link={detail.link}
+          bucket={detail.bucket} // pass bucket as prop
+          onClick={removeHandler}
+          onSave={saveHandler}
+          id={detail.id}
+        />
       ))}
     </div>
   );
 };
 
 export default FetchCardData;
+

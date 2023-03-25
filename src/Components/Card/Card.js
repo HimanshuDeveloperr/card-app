@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 
 const Cards = (props) => {
-  const { name, link, id, onClick, onSave } = props;
+  const { name, link, id, bucket, onClick, onSave } = props;
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [newLink, setNewLink] = useState(link);
@@ -25,6 +25,7 @@ const Cards = (props) => {
       <Card style={{ width: "18rem", margin: "10px" }}>
         <Card.Body>
           <Card.Title>Your details</Card.Title>
+          <Card.Text>Bucket: {bucket}</Card.Text>
           {editing ? (
             <Form>
               <Form.Group controlId="formName">
@@ -63,7 +64,7 @@ const Cards = (props) => {
           ) : (
             <>
               <Button variant="danger" onClick={removeHandler}>
-                Delete
+                Remove
               </Button>
               <Button variant="warning" onClick={editHandler}>
                 Edit
