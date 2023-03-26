@@ -1,7 +1,8 @@
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import Cards from "./Card";
+import "./FetchCardData.css";
 
 const FetchCardData = () => {
   const [cardDetails, setCardDetails] = useState([]);
@@ -69,17 +70,20 @@ const FetchCardData = () => {
   };
 
   return (
-    <div>
-      <h2>Entertainment Bucket</h2>
-      {renderCardsByBucket("Entertainment Videos")}
-      <h2>Sport Bucket</h2>
-      {renderCardsByBucket("Sports Videos")}
-      <h2>Education Bucket</h2>
-      {renderCardsByBucket("Education Videos")}
-    </div>
+    <>
+      <div className="card-container">
+        <h2 className="bucket-title ">Entertainment Bucket</h2>
+        {renderCardsByBucket("Entertainment Videos")}
+        <h2 className="bucket-title ">Sport Bucket</h2>
+        {renderCardsByBucket("Sports Videos")}
+        <h2 className="bucket-title ">Education Bucket</h2>
+        {renderCardsByBucket("Education Videos")}
+      </div>
+      <NavLink to="/history" className="btn btn-primary">
+        Your History
+      </NavLink>
+    </>
   );
 };
 
 export default FetchCardData;
-
-

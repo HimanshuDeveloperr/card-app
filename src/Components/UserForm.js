@@ -1,7 +1,7 @@
-
 import React, { useState } from "react";
 import axios from "axios";
-import FetchCardData from "./Card/FetchCardData";
+import "./UserForm.css"; // Import the CSS file
+import { NavLink } from "react-router-dom";
 
 const UserForm = () => {
   const [name, setName] = useState("");
@@ -30,27 +30,35 @@ const UserForm = () => {
   };
 
   return (
-    <div>
+    <div className="user-form-container">
+      {" "}
+      {/* Add a container div */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Name:</label>
+          <label htmlFor="name">Name:</label>
           <input
+            id="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div>
-          <label>Link:</label>
+          <label htmlFor="link">Link:</label>
           <input
+            id="link"
             type="text"
             value={link}
             onChange={(e) => setLink(e.target.value)}
           />
         </div>
         <div>
-          <label>Bucket:</label>
-          <select value={bucket} onChange={(e) => setBucket(e.target.value)}>
+          <label htmlFor="bucket">Bucket:</label>
+          <select
+            id="bucket"
+            value={bucket}
+            onChange={(e) => setBucket(e.target.value)}
+          >
             <option value="">Select a bucket</option>
             <option value="Entertainment Videos">Entertainment Videos</option>
             <option value="Education Videos">Education Videos</option>
@@ -59,7 +67,11 @@ const UserForm = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
-      <FetchCardData />
+      <div>
+        <NavLink to="/bucket" className="btn btn-primary">
+          Your Cards
+        </NavLink>
+      </div>
     </div>
   );
 };

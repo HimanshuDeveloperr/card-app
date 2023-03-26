@@ -1,86 +1,9 @@
-// import React, { useState } from "react";
-// import { Card, Button, Form } from "react-bootstrap";
 
-// const Cards = (props) => {
-//   const { name, link, id, bucket, onClick, onSave } = props;
-//   const [editing, setEditing] = useState(false);
-//   const [newName, setNewName] = useState(name);
-//   const [newLink, setNewLink] = useState(link);
 
-//   const removeHandler = () => {
-//     onClick(id);
-//   };
-
-//   const editHandler = () => {
-//     setEditing(true);
-//   };
-
-//   const saveHandler = () => {
-//     onSave(id, newName, newLink);
-//     setEditing(false);
-//   };
-
-//   return (
-//     <div>
-//       <Card style={{ width: "18rem", margin: "10px" }}>
-//         <Card.Body>
-//           <Card.Title>Your details</Card.Title>
-//           <Card.Text>Bucket: {bucket}</Card.Text>
-//           {editing ? (
-//             <Form>
-//               <Form.Group controlId="formName">
-//                 <Form.Label>Name</Form.Label>
-//                 <Form.Control
-//                   type="text"
-//                   value={newName}
-//                   onChange={(e) => setNewName(e.target.value)}
-//                 />
-//               </Form.Group>
-//               <Form.Group controlId="formLink">
-//                 <Form.Label>Link</Form.Label>
-//                 <Form.Control
-//                   type="text"
-//                   value={newLink}
-//                   onChange={(e) => setNewLink(e.target.value)}
-//                 />
-//               </Form.Group>
-//             </Form>
-//           ) : (
-//             <>
-//               <Card.Text>Name: {name}</Card.Text>
-//               <Card.Link href={link}>Link</Card.Link>
-//             </>
-//           )}
-
-//           {editing ? (
-//             <>
-//               <Button variant="success" onClick={saveHandler}>
-//                 Save
-//               </Button>
-//               <Button variant="secondary" onClick={() => setEditing(false)}>
-//                 Cancel
-//               </Button>
-//             </>
-//           ) : (
-//             <>
-//               <Button variant="danger" onClick={removeHandler}>
-//                 Remove
-//               </Button>
-//               <Button variant="warning" onClick={editHandler}>
-//                 Edit
-//               </Button>
-//             </>
-//           )}
-//         </Card.Body>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// export default Cards;
-
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Card, Button, Form, Modal } from "react-bootstrap";
+import HistoryContext from "../Store/HistoryContext";
+import './Card.css'
 
 const Cards = (props) => {
 const { name, link, id, bucket, onClick, onSave } = props;
@@ -88,6 +11,8 @@ const [editing, setEditing] = useState(false);
 const [newName, setNewName] = useState(name);
 const [newLink, setNewLink] = useState(link);
 const [showModal, setShowModal] = useState(false);
+
+const History=useContext(HistoryContext)
 
 const removeHandler = () => {
 onClick(id);
@@ -104,6 +29,7 @@ setEditing(false);
 
 const openModal = () => {
 setShowModal(true);
+History.addCards({ name, link, id, bucket })
 };
 
 const closeModal = () => {
@@ -111,11 +37,11 @@ setShowModal(false);
 };
 
 return (
-<div>
-<Card style={{ width: "18rem", margin: "10px" }} onClick={openModal}>
+<div className="card-container">
+<Card className="card" onClick={openModal}>
 <Card.Body>
-<Card.Title>Your details</Card.Title>
-<Card.Text>Bucket: {bucket}</Card.Text>
+<Card.Title className="card-title">Your details</Card.Title>
+<Card.Text className="card-text">Bucket: {bucket}</Card.Text>
 {editing ? (
 <Form>
 <Form.Group controlId="formName">
@@ -143,7 +69,7 @@ onChange={(e) => setNewLink(e.target.value)}
 )}
 {editing ? (
         <>
-          <Button variant="success" onClick={saveHandler}>
+          <Button variant="success" style={{margin:'3px'}}  onClick={saveHandler}>
             Save
           </Button>
           <Button variant="secondary" onClick={() => setEditing(false)}>
@@ -152,7 +78,7 @@ onChange={(e) => setNewLink(e.target.value)}
         </>
       ) : (
         <>
-          <Button variant="danger" onClick={removeHandler}>
+          <Button variant="danger" style={{margin:'3px'}} onClick={removeHandler}>
             Remove
           </Button>
           <Button variant="warning" onClick={editHandler}>
@@ -174,7 +100,7 @@ onChange={(e) => setNewLink(e.target.value)}
   frameBorder="0"
   allowFullScreen
 />
-    </Modal.Body>
+     </Modal.Body>
   </Modal>
 </div>
 );
